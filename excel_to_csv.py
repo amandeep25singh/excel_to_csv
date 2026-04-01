@@ -5,6 +5,9 @@ import zipfile
 
 st.set_page_config(page_title="Excel to CSV Converter", layout="wide")
 
+# Add logo (place logo.png in same directory or provide path)
+st.image("logo.png", width=150)
+
 st.title("📂 Excel to CSV Converter")
 st.write("Upload one or more Excel files and convert them into CSV format (same filename, only format change).")
 
