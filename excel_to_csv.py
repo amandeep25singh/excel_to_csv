@@ -2,12 +2,11 @@ import streamlit as st
 import pandas as pd
 import io
 import zipfile
-import openpyxl
 
 st.set_page_config(page_title="Excel to CSV Converter", layout="wide")
 
 st.title("📂 Excel to CSV Converter")
-st.write("Upload one or more Excel files and convert them into CSV format (ZIP for multiple files).")
+st.write("Upload one or more Excel files and convert them into CSV format (same filename, only format change).")
 
 # File uploader (multiple files allowed)
 uploaded_files = st.file_uploader(
@@ -17,7 +16,6 @@ uploaded_files = st.file_uploader(
 )
 
 if uploaded_files:
-    # If multiple files → prepare ZIP
     zip_buffer = io.BytesIO()
     zip_file = zipfile.ZipFile(zip_buffer, "w", zipfile.ZIP_DEFLATED)
 
@@ -32,31 +30,36 @@ if uploaded_files:
 
             st.write(f"Sheets found: {', '.join(sheet_names)}")
 
+            # Combine all sheets into ONE dataframe (no extra columns)
+            combined_df = []
+
             for sheet in sheet_names:
                 df = excel_data.parse(sheet)
-
-                # Convert dataframe to CSV
-                csv_buffer = io.StringIO()
-                df.to_csv(csv_buffer, index=False)
-                csv_data = csv_buffer.getvalue()
-
-                filename = f"{uploaded_file.name.rsplit('.',1)[0]}_{sheet}.csv"
-
-                if multiple_files:
-                    # Add to ZIP
-                    zip_file.writestr(filename, csv_data)
-                else:
-                    # Single file → direct download
-                    st.download_button(
-                        label=f"⬇️ Download CSV ({sheet})",
-                        data=csv_data,
-                        file_name=filename,
-                        mime="text/csv"
-                    )
+                combined_df.append(df)
 
                 # Preview
                 with st.expander(f"Preview: {sheet}"):
                     st.dataframe(df)
+
+            final_df = pd.concat(combined_df, ignore_index=True)
+
+            # Convert to CSV
+            csv_buffer = io.StringIO()
+            final_df.to_csv(csv_buffer, index=False)
+            csv_data = csv_buffer.getvalue()
+
+            # SAME filename, only extension changed
+            filename = uploaded_file.name.rsplit('.', 1)[0] + ".csv"
+
+            if multiple_files:
+                zip_file.writestr(filename, csv_data)
+            else:
+                st.download_button(
+                    label="⬇️ Download CSV",
+                    data=csv_data,
+                    file_name=filename,
+                    mime="text/csv"
+                )
 
         except Exception as e:
             st.error(f"Error processing {uploaded_file.name}: {e}")
