@@ -113,6 +113,8 @@ if uploaded_files:
             st.error(f"Error processing {uploaded_file.name}: {e}")
 
     # OUTPUT SECTION (always below uploader)
+    task_completed = False
+
     if multiple_files:
         zip_file.close()
         zip_buffer.seek(0)
@@ -123,6 +125,7 @@ if uploaded_files:
             file_name="converted_csv_files.zip",
             mime="application/zip"
         )
+        task_completed = True
     else:
         for filename, csv_data in results:
             st.download_button(
@@ -131,3 +134,11 @@ if uploaded_files:
                 file_name=filename,
                 mime="text/csv"
             )
+            task_completed = True
+
+    # Show new task option after result
+    if task_completed:
+        st.markdown("<br>", unsafe_allow_html=True)
+        if st.button("🔄 Start New Task"):
+            st.session_state.clear()
+            st.rerun()
