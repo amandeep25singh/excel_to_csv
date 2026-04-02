@@ -102,9 +102,7 @@ if uploaded_files:
                     df = excel_data.parse(sheet)
                     combined_df.append(df)
 
-                    # Preview
-                    with st.expander(f"Preview: {sheet}"):
-                        st.dataframe(df)
+                    
 
                 final_df = pd.concat(combined_df, ignore_index=True)
 
