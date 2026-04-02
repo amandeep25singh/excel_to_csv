@@ -28,6 +28,20 @@ def set_bg(image_file):
 # Apply background
 set_bg("bg.png")
 
+# Global text styling
+st.markdown("""
+    <style>
+    html, body, [class*="css"]  {
+        color: white !important;
+        font-size: 12px !important;
+    }
+    .stMarkdown, .stText, .stDataFrame, .stExpander {
+        color: white !important;
+    }
+    </style>
+""", unsafe_allow_html=True)
+set_bg("bg.png")
+
 # Layout: left margin (30%) + main content
 left_margin, main_content = st.columns([3,7])
 
