@@ -78,57 +78,56 @@ with main_content:
 
     
 if uploaded_files:
-        zip_buffer = io.BytesIO()
-        zip_file = zipfile.ZipFile(zip_buffer, "w", zipfile.ZIP_DEFLATED)
+    zip_buffer = io.BytesIO()
+    zip_file = zipfile.ZipFile(zip_buffer, "w", zipfile.ZIP_DEFLATED)
 
-        multiple_files = len(uploaded_files) > 1
+    multiple_files = len(uploaded_files) > 1
+    results = []
 
-        for uploaded_file in uploaded_files:
-            
-            
-            try:
-                excel_data = pd.ExcelFile(uploaded_file)
-                sheet_names = excel_data.sheet_names
+    for uploaded_file in uploaded_files:
+        try:
+            excel_data = pd.ExcelFile(uploaded_file)
+            sheet_names = excel_data.sheet_names
 
-                
+            combined_df = []
 
-                combined_df = []
+            for sheet in sheet_names:
+                df = excel_data.parse(sheet)
+                combined_df.append(df)
 
-                for sheet in sheet_names:
-                    df = excel_data.parse(sheet)
-                    combined_df.append(df)
+            final_df = pd.concat(combined_df, ignore_index=True)
 
-                    
+            # Convert to CSV
+            csv_buffer = io.StringIO()
+            final_df.to_csv(csv_buffer, index=False)
+            csv_data = csv_buffer.getvalue()
 
-                final_df = pd.concat(combined_df, ignore_index=True)
+            filename = uploaded_file.name.rsplit('.', 1)[0] + ".csv"
 
-                # Convert to CSV
-                csv_buffer = io.StringIO()
-                final_df.to_csv(csv_buffer, index=False)
-                csv_data = csv_buffer.getvalue()
+            if multiple_files:
+                zip_file.writestr(filename, csv_data)
+            else:
+                results.append((filename, csv_data))
 
-                filename = uploaded_file.name.rsplit('.', 1)[0] + ".csv"
+        except Exception as e:
+            st.error(f"Error processing {uploaded_file.name}: {e}")
 
-                if multiple_files:
-                    zip_file.writestr(filename, csv_data)
-                else:
-                    st.download_button(
-                        label="⬇️ Download CSV",
-                        data=csv_data,
-                        file_name=filename,
-                        mime="text/csv"
-                    )
+    # OUTPUT SECTION (always below uploader)
+    if multiple_files:
+        zip_file.close()
+        zip_buffer.seek(0)
 
-            except Exception as e:
-                st.error(f"Error processing {uploaded_file.name}: {e}")
-
-        if multiple_files:
-            zip_file.close()
-            zip_buffer.seek(0)
-
+        st.download_button(
+            label="⬇️ Download All as ZIP",
+            data=zip_buffer,
+            file_name="converted_csv_files.zip",
+            mime="application/zip"
+        )
+    else:
+        for filename, csv_data in results:
             st.download_button(
-                label="⬇️ Download All as ZIP",
-                data=zip_buffer,
-                file_name="converted_csv_files.zip",
-                mime="application/zip"
+                label="⬇️ Download CSV",
+                data=csv_data,
+                file_name=filename,
+                mime="text/csv"
             )
