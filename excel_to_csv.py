@@ -136,12 +136,11 @@ if uploaded_files:
             )
             task_completed = True
 
-    # Show new task option after result
         # Show new task option after result
     if task_completed:
         st.markdown("<br>", unsafe_allow_html=True)
-        # Use a link-style button workaround
-        if st.button("🔄 Start New Task", key="new_task"):
-            for key in list(st.session_state.keys()):
-                del st.session_state[key]
-            st.rerun()
+        st.markdown("""
+            <a href="?" target="_self" style="color: white; text-decoration: underline;">
+                🔄 Start New Task
+            </a>
+        """, unsafe_allow_html=True)
