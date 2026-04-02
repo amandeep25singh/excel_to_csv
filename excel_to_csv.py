@@ -18,7 +18,7 @@ with left_margin:
     - Each file is converted into CSV format
     - Multiple files are downloaded as a ZIP
 
-    **Developed by**
+    **Developed by:**
     Amandeep Singh, AAO(DAC)
     """)
 
