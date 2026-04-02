@@ -33,7 +33,7 @@ st.markdown("""
     <style>
     html, body, [class*="css"]  {
         color: white !important;
-        font-size: 12px !important;
+        font-size: 15.6px !important;
     }
     .stMarkdown, .stText, .stDataFrame, .stExpander {
         color: white !important;
