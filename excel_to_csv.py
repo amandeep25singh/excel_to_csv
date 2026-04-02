@@ -67,7 +67,7 @@ with main_content:
     st.markdown("</div>", unsafe_allow_html=True)
 
     st.title("📂 Excel to CSV Converter")
-    st.write("Upload one or more Excel files and convert them into CSV format (same filename, only format change).")
+    
 
     # File uploader (multiple files allowed)
     uploaded_files = st.file_uploader(
@@ -83,13 +83,13 @@ with main_content:
         multiple_files = len(uploaded_files) > 1
 
         for uploaded_file in uploaded_files:
-            st.subheader(f"📄 File: {uploaded_file.name}")
+            
             
             try:
                 excel_data = pd.ExcelFile(uploaded_file)
                 sheet_names = excel_data.sheet_names
 
-                st.write(f"Sheets found: {', '.join(sheet_names)}")
+                
 
                 combined_df = []
 
