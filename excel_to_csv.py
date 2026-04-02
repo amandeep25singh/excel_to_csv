@@ -17,6 +17,9 @@ with left_margin:
     - Upload one or more Excel files
     - Each file is converted into CSV format
     - Multiple files are downloaded as a ZIP
+
+    **Developed by**
+    Amandeep Singh, AAO(DAC)
     """)
 
 with main_content:
