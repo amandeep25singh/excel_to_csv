@@ -8,21 +8,24 @@ st.set_page_config(page_title="Excel to CSV Converter", layout="wide")
 
 # Function to set background image
 def set_bg(image_file):
-    with open(image_file, "rb") as f:
-        data = f.read()
-    encoded = base64.b64encode(data).decode()
-    st.markdown(f"""
-        <style>
-        .stApp {
-            background-image: url("data:image/png;base64,{encoded}");
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-        }
-        </style>
-    """, unsafe_allow_html=True)
+    try:
+        with open(image_file, "rb") as f:
+            data = f.read()
+        encoded = base64.b64encode(data).decode()
+        st.markdown(f"""
+            <style>
+            .stApp {{
+                background-image: url('data:image/png;base64,{encoded}');
+                background-size: cover;
+                background-position: center;
+                background-repeat: no-repeat;
+            }}
+            </style>
+        """, unsafe_allow_html=True)
+    except FileNotFoundError:
+        st.warning("Background image not found. Please add bg.png")
 
-# Apply background (place bg.png in project folder)
+# Apply background
 set_bg("bg.png")
 
 # Layout: left margin (30%) + main content
