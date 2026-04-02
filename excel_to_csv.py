@@ -9,6 +9,7 @@ st.set_page_config(page_title="Excel to CSV Converter", layout="wide")
 col1, col2, col3 = st.columns([1,2,1])
 with col2:
     st.image("logo.png", width=150)
+    st.markdown("<h4 style='text-align: center;'>Accountant General (Audit), J&K</h4>", unsafe_allow_html=True)
 
 st.title("📂 Excel to CSV Converter")
 st.write("Upload one or more Excel files and convert them into CSV format (same filename, only format change).")
