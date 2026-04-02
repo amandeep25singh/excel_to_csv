@@ -17,11 +17,6 @@ with left_margin:
     - Upload one or more Excel files
     - Each file is converted into CSV format
     - Multiple files are downloaded as a ZIP
-    
-    **Use cases:**
-    - Audit data processing
-    - CPSMS / financial data cleaning
-    - Easy import into analysis tools
     """)
 
 with main_content:
