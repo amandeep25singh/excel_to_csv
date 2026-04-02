@@ -76,11 +76,7 @@ with main_content:
         accept_multiple_files=True
     )
 
-    # Reset option
-if st.button("🔄 Start New Task"):
-    st.session_state.clear()
-    st.experimental_rerun()
-
+    
 if uploaded_files:
         zip_buffer = io.BytesIO()
         zip_file = zipfile.ZipFile(zip_buffer, "w", zipfile.ZIP_DEFLATED)
